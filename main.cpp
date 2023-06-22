@@ -7,7 +7,6 @@
 static int max_x = 0, max_y = 0; // screen size
 
 // launch parameters
-bool showEnemyShips = false;     // decides if the ships on the second arena will be shown (default: false)
 bool manualShipPlacement = true; // decides if user will manually place the ships (default: true)
 
 // menu
@@ -109,6 +108,7 @@ void intro()
     while (tolower(getch()) != ' ')
         msleep(1);
     clear();
+    sound_play("Sounds/correct.wav");
 }
 
 // draws an arena on y, x with height and width
@@ -358,6 +358,9 @@ void placeShips(int player)
 
             if (cellCounter == 0) // means there are no ships
             {
+                // play the sound of placed ship
+                sound_play("Sounds/correct.wav");
+
                 // save the ship into an array
                 for (int i = y; i < y + height; i++)
                 {
@@ -418,6 +421,10 @@ void placeShips(int player)
                     // do nothing
                     break;
                 }
+            }
+            else
+            {
+                sound_play("Sounds/error.wav"); // ship cannot be placed -> plays error sound
             }
 
             // reset cell counter
@@ -624,9 +631,11 @@ void turn()
             break;
         case ' ': // shot
             clearPointer(yPointer, xPointer);
+
             // refresh the screen
             refresh();
             // check the cell at y, x
+
             result = shoot(yPointer, xPointer, 1);
             // refresh the screen
             refresh();
@@ -635,13 +644,17 @@ void turn()
             {
             case 0: // no shot by player was made
                 missed = false;
+                sound_play("Sounds/error.wav"); // shot cannot be made -> plays error sound
                 break;
             case 1: // player missed
                 missed = true;
+                sound_play("Sounds/splash.wav"); // playing sound of a splash
+                msleep(2000);
                 break;
             case 2:
-                missed = false; // player hit a ship
-                msleep(1000);   // pause before drawing pointer again so player sees the damaged ship
+                missed = false;                     // player hit a ship
+                sound_play("Sounds/explosion.wav"); // playing sound of an explosion
+                msleep(2000);                       // pause before drawing pointer again so player sees the damaged ship
                 break;
             default:
                 break;
@@ -675,9 +688,12 @@ void computerTurn()
             break;
         case 1: // computer missed
             missed = true;
+            sound_play("Sounds/splash.wav"); // playing sound of a splash
+            msleep(2000);
             break;
         case 2:
-            missed = false; // computer hit a ship
+            missed = false;                     // computer hit a ship
+            sound_play("Sounds/explosion.wav"); // playing sound of an explosion
             msleep(2000);
             break;
         default:
@@ -699,6 +715,8 @@ void playerWon()
         int ty = (max_y - 4) / 2 + 1;
         init_grid_font();
         draw_grid_text(ty - get_grid_char_lines() / 2, tx - strlen(text) * get_grid_char_cols() / 2, text);
+
+        sound_play("Sounds/win.wav"); // play a win sound
     }
     if (firstPlayerShips == 0)
     {
@@ -707,6 +725,8 @@ void playerWon()
         int ty = (max_y - 4) / 2 + 1;
         init_grid_font();
         draw_grid_text(ty - get_grid_char_lines() / 2, tx - strlen(text) * get_grid_char_cols() / 2, text);
+
+        sound_play("Sounds/lose.wav"); // play a lose sound
     }
 
     const char quit[] = "Press 'q' to quit the game";
@@ -764,6 +784,8 @@ void chooseGameMode()
             draw_line(LINES - 6, (COLS / 2) - strlen(choiceLine) / 2 + 36, LINES - 6, (COLS / 2) - strlen(choiceLine) / 2 + 36 + 34);
             refresh();
 
+            sound_play("Sounds/correct.wav");
+
             manualShipPlacement = false;
             break;
         case 'a':
@@ -779,10 +801,13 @@ void chooseGameMode()
             draw_line(LINES - 6, (COLS / 2) - strlen(choiceLine) / 2, LINES - 6, (COLS / 2) - strlen(choiceLine) / 2 + 26);
             refresh();
 
+            sound_play("Sounds/correct.wav");
+
             manualShipPlacement = true;
             break;
         case ' ':
             menuChoiceMade = true;
+            sound_play("Sounds/correct.wav");
             break;
         default:
             break;
@@ -852,34 +877,20 @@ int main()
     // generate random ships on the second arena
     generateRandomShips(1);
 
-    // shows enemy ships
-    if (showEnemyShips)
-    {
-        shootWholeArena(1);
-    }
-
     // game loop
     while (firstPlayerShips != 0 && secondPlayerShips != 0)
     {
         // players turn
         turn();
 
-        sound_play("Sounds/boing.wav");
-
         // refresh the window
         refresh();
-
-        // pause
-        msleep(1000);
 
         // computers turn
         computerTurn();
 
         // refresh the window
         refresh();
-
-        // pause
-        msleep(1000);
     }
 
     // clear the screen

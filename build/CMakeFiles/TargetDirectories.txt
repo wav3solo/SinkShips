@@ -1,0 +1,4 @@
+/Users/illiasoloviov/Documents/GitHub/SinkShips/build/CMakeFiles/asciigfx.dir
+/Users/illiasoloviov/Documents/GitHub/SinkShips/build/CMakeFiles/main.dir
+/Users/illiasoloviov/Documents/GitHub/SinkShips/build/CMakeFiles/edit_cache.dir
+/Users/illiasoloviov/Documents/GitHub/SinkShips/build/CMakeFiles/rebuild_cache.dir

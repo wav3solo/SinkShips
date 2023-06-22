@@ -358,8 +358,6 @@ void placeShips(int player)
 
             if (cellCounter == 0) // means there are no ships
             {
-                // play the sound of placed ship
-                sound_play("Sounds/correct.wav");
 
                 // save the ship into an array
                 for (int i = y; i < y + height; i++)
@@ -442,6 +440,9 @@ void placeShips(int player)
         firstPlayerShips = 20;
     else if (player == 1)
         secondPlayerShips = 20;
+
+    // play the sound of placed ships
+    sound_play("Sounds/correct.wav");
 }
 
 // automatically generates 10 ships on a specific arena (1 with size of 4; 2 with size of 3; 3 with size of 2 and 4 with size of 1)
@@ -784,8 +785,6 @@ void chooseGameMode()
             draw_line(LINES - 6, (COLS / 2) - strlen(choiceLine) / 2 + 36, LINES - 6, (COLS / 2) - strlen(choiceLine) / 2 + 36 + 34);
             refresh();
 
-            sound_play("Sounds/correct.wav");
-
             manualShipPlacement = false;
             break;
         case 'a':
@@ -800,8 +799,6 @@ void chooseGameMode()
             // draw new line
             draw_line(LINES - 6, (COLS / 2) - strlen(choiceLine) / 2, LINES - 6, (COLS / 2) - strlen(choiceLine) / 2 + 26);
             refresh();
-
-            sound_play("Sounds/correct.wav");
 
             manualShipPlacement = true;
             break;

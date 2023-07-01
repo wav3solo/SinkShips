@@ -106,9 +106,18 @@ void intro()
     printHintToStartGame();
     printGameRules();
 
-    while (tolower(getch()) != ' ')
+    int input = tolower(getch());
+
+    while (input != ' ')
     {
+        if (input == 'q')
+        {
+            exit_gfx();
+            exit(0);
+        }
         msleep(1);
+
+        input = tolower(getch());
     }
 
     clear();

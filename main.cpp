@@ -105,8 +105,12 @@ void intro()
     printGamesName();
     printHintToStartGame();
     printGameRules();
+
     while (tolower(getch()) != ' ')
+    {
         msleep(1);
+    }
+
     clear();
     sound_play("Sounds/correct.wav");
 }
@@ -429,6 +433,12 @@ void placeShips(int player)
             cellCounter = 0;
 
             break;
+        case 'q':
+        case 'Q':
+            // exit gfx framework
+            exit_gfx();
+            exit(0);
+            break;
         default:
             // do nothing
             break;
@@ -661,6 +671,13 @@ void turn()
                 break;
             }
             break;
+        case 'q':
+        case 'Q':
+            // exit gfx framework
+            exit_gfx();
+            exit(0);
+
+            break;
         default:
             break;
         }
@@ -699,6 +716,12 @@ void computerTurn()
             break;
         default:
             break;
+        }
+
+        if (tolower(getch()) == 'q')
+        {
+            exit_gfx();
+            exit(0);
         }
     }
 }
@@ -805,6 +828,12 @@ void chooseGameMode()
         case ' ':
             menuChoiceMade = true;
             sound_play("Sounds/correct.wav");
+            break;
+        case 'q':
+        case 'Q':
+            // exit gfx framework
+            exit_gfx();
+            exit(0);
             break;
         default:
             break;

@@ -682,7 +682,6 @@ void turn()
             break;
         case 'q':
         case 'Q':
-            // exit gfx framework
             exit_gfx();
             exit(0);
 
@@ -696,17 +695,16 @@ void turn()
 // generates a computers turn
 void computerTurn()
 {
+    int y = 0;
+    int x = 0;
+    bool missed = false;
+    int result;
 
     if (tolower(getch()) == 'q')
     {
         exit_gfx();
         exit(0);
     }
-
-    int y = 0;
-    int x = 0;
-    bool missed = false;
-    int result;
 
     while (!missed && firstPlayerShips != 0 && secondPlayerShips != 0)
     {
@@ -715,6 +713,13 @@ void computerTurn()
 
         result = shoot(y, x, 0); // make a shot
         refresh();               // refresh the screen
+
+        if (tolower(getch()) == 'q')
+        {
+            exit_gfx();
+            exit(0);
+        }
+
         switch (result)
         {
         case 0: // no shot by computer was made
@@ -841,7 +846,6 @@ void chooseGameMode()
             break;
         case 'q':
         case 'Q':
-            // exit gfx framework
             exit_gfx();
             exit(0);
             break;

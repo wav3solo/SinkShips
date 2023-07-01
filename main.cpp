@@ -687,6 +687,13 @@ void turn()
 // generates a computers turn
 void computerTurn()
 {
+
+    if (tolower(getch()) == 'q')
+    {
+        exit_gfx();
+        exit(0);
+    }
+
     int y = 0;
     int x = 0;
     bool missed = false;
@@ -716,12 +723,6 @@ void computerTurn()
             break;
         default:
             break;
-        }
-
-        if (tolower(getch()) == 'q')
-        {
-            exit_gfx();
-            exit(0);
         }
     }
 }

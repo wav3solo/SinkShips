@@ -43,7 +43,7 @@ const int firstPlayersArenaX = 5;
 const int secondPlayersArenaY = firstPlayersArenaY;
 const int secondPlayersArenaX = firstPlayersArenaX + cellWidth * arenaSize + offsetBetweenArenas;
 
-// adressing array, contains information about all the cells on both arenas and the content inside
+// addressing array, contains information about all the cells on both arenas and the content inside
 int cells[arenaSize][arenaSize][2];
 
 // ship counters
@@ -69,7 +69,7 @@ void draw_square(int y, int x, int height, int width)
     draw_line(y + 1, x + width, y + height - 1, x + width);
 }
 
-// prints "press s to start the game" on the screen
+// prints "press space to start the game" on the screen
 void printHintToStartGame()
 {
 
@@ -79,7 +79,7 @@ void printHintToStartGame()
     refresh();
 }
 
-// prints "Schiffe Versenken" on the screen
+// prints "Sink Ships" on the screen
 void printGamesName()
 {
     const char text[] = "Sink ships";
@@ -135,11 +135,11 @@ void draw_arena(int y, int x, int height, int width)
         move(y - 1, x + ((cellWidth - 1) / 2) + (cellWidth - 1) * i);
         printw("%c", letterCoordinates[i]);
     }
-    const char numberCoorinates[] = "123456789";
+    const char numberCoordinates[] = "123456789";
     for (int i = 0; i < 9; i++)
     {
         move(y + ((cellHeight - 1) / 2) + (cellHeight - 1) * i, x - 1);
-        printw("%c", numberCoorinates[i]);
+        printw("%c", numberCoordinates[i]);
     }
     move(y + ((cellHeight - 1) / 2) + (cellHeight - 1) * 9, x - 2);
     printw("10");
@@ -176,7 +176,7 @@ void fillOneCell(int y, int x, int player, int color, char c)
     // 4: blue
     use_color(color);
 
-    // initializes the coordiantes of the arena
+    // initializes the coordinates of the arena
     int arenaY = 0;
     int arenaX = 0;
 
@@ -192,7 +192,7 @@ void fillOneCell(int y, int x, int player, int color, char c)
         arenaX = secondPlayersArenaX;
         break;
     default:
-        // we shoould never get here
+        // we should never get here
         break;
     }
 
@@ -251,10 +251,10 @@ int shoot(int y, int x, int player)
     case 0:                      // there is nothing
         cells[y][x][player] = 1; // this cell is now shot
         fillOneCell(y, x, player, aliveShipColor, shotCellChar);
-        return 1; // menans player missed
+        return 1; // means player missed
         break;
     case 1: // the cell was shot yet
-        // do nothung
+        // do nothing
         return 0; // means no shot was made
         break;
     case 2:                      // there is a ship
@@ -284,15 +284,15 @@ int shoot(int y, int x, int player)
 void placeShips(int player)
 {
 
-    int y = 0;              // starting x coorinate of new ships
-    int x = 0;              // starting y coorinate of new ships
+    int y = 0;              // starting x coordinate of new ships
+    int x = 0;              // starting y coordinate of new ships
     int height = 4;         // starting height of new ships
     int width = 1;          // starting width of new ships
     int shipCounter = 0;    // counting placed ships
-    int cellCounter = 0;    // counts cells filled with ships arround the ship
+    int cellCounter = 0;    // counts cells filled with ships around the ship
     int tmpHeight;          // to save temporary height of a ship before rotating
     int tmpWidth;           // to save temporary width of a ship before rotating
-    int rotationAspect = 0; // saves the rotation aspect of a ship
+    int rotationArgument = 0; // saves the rotation aspect of a ship (even -> vertical; odd -> horizontal)
 
     while (shipCounter < 10)
     {
@@ -340,7 +340,7 @@ void placeShips(int player)
             height = tmpWidth;
             width = tmpHeight;
 
-            rotationAspect++;
+            rotationArgument++;
 
             // check if rotation is possible without leaving arena
             if ((y + height - 1) > 9)
@@ -393,13 +393,13 @@ void placeShips(int player)
                 // 2 ships with size 3
                 case 1:
                 case 2:
-                    if (rotationAspect % 2 == 1)
-                    { // vertical
+                    if (rotationArgument % 2 == 1)
+                    { // horizontal
                         height = 1;
                         width = 3;
                     }
                     else
-                    { // horizontal
+                    { // vertical
                         height = 3;
                         width = 1;
                     }
@@ -409,13 +409,13 @@ void placeShips(int player)
                 case 3:
                 case 4:
                 case 5:
-                    if (rotationAspect % 2 == 1)
-                    { // vertical
+                    if (rotationArgument % 2 == 1)
+                    { // horizontal
                         height = 1;
                         width = 2;
                     }
                     else
-                    { // horizontal
+                    { // vertical
                         height = 2;
                         width = 1;
                     }
@@ -467,8 +467,8 @@ void placeShips(int player)
 // automatically generates 10 ships on a specific arena (1 with size of 4; 2 with size of 3; 3 with size of 2 and 4 with size of 1)
 void generateRandomShips(int player)
 {
-    int y = 0;           // starting x coorinate of new ships
-    int x = 0;           // starting y coorinate of new ships
+    int y = 0;           // starting x coordinate of new ships
+    int x = 0;           // starting y coordinate of new ships
     int sizeY = 4;       // starting height of new ships
     int sizeX = 1;       // starting width of new ships
     int shipCounter = 0; // counting placed ships
@@ -480,7 +480,7 @@ void generateRandomShips(int player)
     while (shipCounter < 10)
     {
 
-        // generate rotation argument of a ship (0 - no rotation; 1 - rotation)
+        // generate rotation argument of a ship (0 - vertical; 1 - horizontal)
         rotationArgument = (rand() % 2);
         // rotation
         if (rotationArgument == 1)
@@ -573,18 +573,6 @@ void generateRandomShips(int player)
         firstPlayerShips = 20;
     else if (player == 1)
         secondPlayerShips = 20;
-}
-
-// checks all the cells on a specific arena
-void shootWholeArena(int player)
-{
-    for (int i = 0; i < 10; i++)
-    {
-        for (int j = 0; j < 10; j++)
-        {
-            shoot(i, j, player);
-        }
-    }
 }
 
 // clears the pointer on y, x position. used in turn() method
@@ -784,7 +772,7 @@ void chooseGameMode()
     const char firstLine[] = "DO YOU WANT TO PLACE";
     const char secondLine[] = "SHIPS BY YOURSELF?";
 
-    // calculate psotion of the text
+    // calculate position of the text
     int tx = max_x / 2;
     int ty = (max_y - 4) / 2 + 1;
     init_grid_font();
